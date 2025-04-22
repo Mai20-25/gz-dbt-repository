@@ -1,8 +1,8 @@
 version: 2
 
 sources:
-  - name: gz_raw_data   # This is the dataset name
-    database: your-project-id   # Replace with your actual BigQuery project ID
+  - name: gz_raw_data
+    database: mai-middleton
     schema: gz_raw_data
     tables:
       - name: raw_gz_sales
