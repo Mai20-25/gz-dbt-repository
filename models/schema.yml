@@ -24,4 +24,121 @@ sources:
       - name: ship
         identifier: raw_gz_ship
         description: shipment details
+      - name: adwords
+        identifier: raw_gz_adwords
+        description: Adwords Ads campaign performance
+      - name: bing
+        identifier: raw_gz_bing
+        description: Bing Ads campaign performance
+      - name: criteo
+        identifier: raw_gz_criteo
+        description: Criteo Ads campaign performance
+      - name: facebook
+        identifier: raw_gz_facebook
+        description: Facebook Ads campaign performance
 
+models:
+  - name: int_campaigns
+    description: Combined campaign performance data from Adwords, Bing, Criteo, and Facebook.
+    columns:
+      - name: source
+        description: name of ad platform (adwords, bing, criteo, facebook)
+        tests:
+          - not_null
+      - name: campaign_key
+        description: unique ID of the campaign per source
+        tests:
+          - not_null
+    t    tests:
+      - unique:
+          column_name: "source || '-' || campaign_key || '-' || CAST(date_date AS STRING)"
+  - name: int_campaigns_day
+    description: Daily aggregated ad campaign metrics
+    columns:
+      - name: date_date
+        description: Day of campaign activity
+        tests:
+          - not_null
+          - unique
+      - name: ads_cost
+        description: Total ad spend per day
+        tests:
+          - not_null
+      - name: ads_impression
+        description: Total impressions per day
+        tests:
+          - not_null
+      - name: ads_clicks
+        description: Total clicks per day
+        tests:
+          - not_null
+  - name: finance_campaigns_day
+    description: Daily finance metrics with ad campaign performance
+    columns:
+      - name: date_date
+        description: Day of reporting
+        tests:
+          - not_null
+          - unique
+      - name: ads_margin
+        description: Operational margin minus ad spend
+        tests:
+          - not_null
+      - name: average_basket
+        description: Average order size per transaction
+      - name: operational_margin
+        description: Margin after logistics cost
+      - name: ads_cost
+        description: Total daily ad spend
+      - name: ads_impression
+        description: Daily ad impressions
+      - name: ads_clicks
+        description: Daily ad clicks
+      - name: quantity
+        description: Total products sold
+      - name: revenue
+        description: Total sales revenue
+      - name: purchase_cost
+        description: Cost of products sold
+      - name: margin
+        description: Revenue - purchase_cost
+      - name: shipping_fee
+        description: Shipping charged to customer
+      - name: logcost
+        description: Warehouse processing cost
+      - name: ship_cost
+        description: Delivery cost paid by Greenweez
+  - name: finance_campaigns_month
+    description: Monthly aggregated finance and ad campaign metrics
+    columns:
+      - name: datemonth
+        description: Year and month (YYYY-MM) of reporting
+        tests:
+          - not_null
+          - unique
+      - name: ads_margin
+        description: Operational margin minus ad cost for the month
+      - name: average_basket
+        description: Average basket size during the month
+      - name: operational_margin
+        description: Sum of operational margin
+      - name: ads_cost
+        description: Total ad spend in the month
+      - name: ads_impression
+        description: Total ad impressions in the month
+      - name: ads_clicks
+        description: Total ad clicks in the month
+      - name: quantity
+        description: Products sold during the month
+      - name: revenue
+        description: Total revenue for the month
+      - name: purchase_cost
+        description: Cost of goods sold
+      - name: margin
+        description: Revenue - purchase cost
+      - name: shipping_fee
+        description: Shipping charged to customer
+      - name: logcost
+        description: Warehouse logistics cost
+      - name: ship_cost
+        description: Delivery cost
